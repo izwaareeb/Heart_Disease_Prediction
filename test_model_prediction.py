@@ -62,6 +62,7 @@ import seaborn as sns
 disease_df = pd.read_csv(r"D:\Project\NEW PROJECT\heart_disease_prediction\data\framingham.csv")
 disease_df.drop(['education'], inplace=True, axis=1)
 disease_df.rename(columns={'male': 'Sex_male'}, inplace=True)
+# Remove rows containing missing values before training
 disease_df.dropna(axis=0, inplace=True)
 
 print(disease_df.TenYearCHD.value_counts())
@@ -69,6 +70,7 @@ print(disease_df.TenYearCHD.value_counts())
 X = np.asarray(disease_df[['age', 'Sex_male', 'cigsPerDay', 'totChol', 'sysBP', 'glucose']])
 y = np.asarray(disease_df['TenYearCHD'])
 
+# Standardize features to bring them to a comparable scale
 X = preprocessing.StandardScaler().fit(X).transform(X)
 
 # Split Framingham dataset
@@ -102,6 +104,7 @@ print('Accuracy of the model is =', accuracy_score(y_test, y_pred))
 print('The details for confusion matrix is =')
 print(classification_report(y_test, y_pred))
 
+# Compare actual and predicted classes to evaluate model performance
 cm = confusion_matrix(y_test, y_pred)
 conf_matrix = pd.DataFrame(data=cm, 
                            columns=['Predicted:0', 'Predicted:1'], 
