@@ -59,7 +59,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load and preprocess Framingham dataset
-disease_df = pd.read_csv(r"D:\Project\NEW PROJECT\heart_disease_prediction\data\framingham.csv")
+disease_df = pd.read_csv(r"D:\Project\Heart_Disease_Prediction\heart_disease_prediction\data\framingham.csv")
 disease_df.drop(['education'], inplace=True, axis=1)
 disease_df.rename(columns={'male': 'Sex_male'}, inplace=True)
 # Remove rows containing missing values before training
@@ -70,11 +70,20 @@ print(disease_df.TenYearCHD.value_counts())
 X = np.asarray(disease_df[['age', 'Sex_male', 'cigsPerDay', 'totChol', 'sysBP', 'glucose']])
 y = np.asarray(disease_df['TenYearCHD'])
 
-# Standardize features to bring them to a comparable scale
-X = preprocessing.StandardScaler().fit(X).transform(X)
+# Split Framingham dataset before scaling to prevent data leakage
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=4
+)
 
-# Split Framingham dataset
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
+# Fit the scaler only on training data, then transform both sets
+scaler = preprocessing.StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Fit the scaler on training data only
+scaler = preprocessing.StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 print('Train set:', X_train.shape, y_train.shape)
 print('Test set:', X_test.shape, y_test.shape)
 
