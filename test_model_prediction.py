@@ -102,12 +102,32 @@ logreg = LogisticRegression()
 logreg.fit(X_train, y_train)
 y_pred = logreg.predict(X_test)
 
-# Accuracy and Confusion Matrix
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-print('Accuracy of the model is =', accuracy_score(y_test, y_pred))
+# Evaluate model performance
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    classification_report,
+    roc_auc_score
+)
 
-print('The details for confusion matrix is =')
-print(classification_report(y_test, y_pred))
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+report = classification_report(y_test, y_pred)
+roc_auc = roc_auc_score(y_test, logreg.predict_proba(X_test)[:, 1])
+
+print("Accuracy of the model is =", accuracy)
+print("Confusion Matrix:")
+print(cm)
+print("Classification Report:")
+print(report)
+print("ROC AUC Score:", roc_auc)
+
+# Save evaluation results to a text file
+with open("classification_report.txt", "w", encoding="utf-8") as file:
+    file.write(f"Accuracy: {accuracy}\n\n")
+    file.write(f"Confusion Matrix:\n{cm}\n\n")
+    file.write(f"Classification Report:\n{report}\n")
+    file.write(f"\nROC AUC Score: {roc_auc}\n")
 
 # Compare actual and predicted classes to evaluate model performance
 cm = confusion_matrix(y_test, y_pred)
