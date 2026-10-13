@@ -80,10 +80,6 @@ scaler = preprocessing.StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# Fit the scaler on training data only
-scaler = preprocessing.StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
 print('Train set:', X_train.shape, y_train.shape)
 print('Test set:', X_test.shape, y_test.shape)
 
